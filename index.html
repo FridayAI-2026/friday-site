@@ -6,192 +6,309 @@
     <title>Пятница Продакшн</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #1e1e24 0%, #2d2d3a 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a10; /* Глубокий черный */
+            color: #fff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
-        .bg-blur { position: fixed; width: 100%; height: 100%; z-index: 0; overflow: hidden; top: 0; left: 0; }
-        .blur-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; }
-        .circle-1 { width: 400px; height: 400px; background: #007aff; top: -100px; left: -100px; }
-        .circle-2 { width: 300px; height: 300px; background: #af52de; bottom: -50px; right: -50px; }
-        .circle-3 { width: 250px; height: 250px; background: #ff2d55; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.3; }
-        
-        .mac-window {
+
+        /* --- ПАДАЮЩИЕ ТОЧКИ (СНЕЖОК) --- */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none; /* Чтобы точки не мешали кликать */
+        }
+
+        /* --- ГЛАВНОЕ ОКНО --- */
+        .container {
             position: relative;
             z-index: 1;
-            background: rgba(30, 30, 40, 0.75);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 16px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-            width: 100%;
-            max-width: 900px;
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
+            background: rgba(10, 15, 25, 0.85); /* Темно-синий полупрозрачный */
+            backdrop-filter: blur(10px);
+            border: 1px solid #1a5276; /* Темно-синяя рамка */
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.1); /* Легкое свечение */
+            border-radius: 12px;
+            width: 95%;
+            max-width: 950px;
             display: flex;
             flex-direction: column;
+            padding: 30px;
         }
-        .window-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            background: rgba(0, 0, 0, 0.2);
-        }
-        .dots { display: flex; gap: 8px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; transition: transform 0.2s; }
-        .dot:hover { transform: scale(1.2); }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
-        .window-title {
-            flex-grow: 1;
+
+        /* Заголовок */
+        header {
             text-align: center;
-            font-size: 13px;
-            font-weight: 500;
-            color: #a1a1a6;
-            margin-right: 56px;
-            letter-spacing: 0.5px;
-        }
-        
-        .content { padding: 40px 50px; display: flex; gap: 40px; }
-        .left-side { flex: 1.2; display: flex; flex-direction: column; }
-        .app-icon {
-            width: 70px; height: 70px;
-            background: linear-gradient(135deg, #007aff, #af52de);
-            border-radius: 18px;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 36px; margin-bottom: 15px;
-            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3);
+            margin-bottom: 30px;
         }
         h1 {
-            font-size: 38px; font-weight: 700; margin-bottom: 10px;
-            background: linear-gradient(to right, #fff, #a1a1a6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 48px;
+            color: #00ffff; /* Голубой неон */
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            font-weight: 800;
         }
-        .main-slogan { font-size: 18px; color: #fff; font-weight: 500; margin-bottom: 25px; line-height: 1.3; }
-        
-        /* Стили для списка команд (взято с твоего скрина) */
-        .commands-box {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
+        .subtitle {
+            font-size: 18px;
+            color: #a0a0b0;
+            letter-spacing: 1px;
+        }
+
+        /* Основная сетка (Слева команды, справа оплата) */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        /* --- ЛЕВАЯ КОЛОНКА (СПИСОК КОМАНД) --- */
+        .commands-wrapper {
+            border: 1px solid #0077ff; /* Синяя рамка */
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-            max-height: 350px;
+            background: rgba(0, 30, 60, 0.4);
+            box-shadow: inset 0 0 20px rgba(0, 119, 255, 0.1);
+        }
+
+        .commands-title {
+            color: #00ffcc; /* Бирюзовый */
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed #0077ff;
+            padding-bottom: 10px;
+        }
+
+        .commands-list {
+            max-height: 400px;
             overflow-y: auto;
+            padding-right: 10px;
         }
-        .commands-box::-webkit-scrollbar { width: 6px; }
-        .commands-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-        
-        .commands-box h3 { font-size: 13px; color: #007aff; text-transform: uppercase; margin-bottom: 10px; margin-top: 15px; letter-spacing: 1px;}
-        .commands-box h3:first-child { margin-top: 0; }
-        .commands-box p { font-size: 14px; color: #e5e5ea; margin-bottom: 5px; line-height: 1.4; }
-        .commands-box p span { color: #86868b; font-size: 12px; } /* Приписки типа (от 0 до 100) */
-        
-        .right-side {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: fit-content;
-            margin-top: auto;
-            margin-bottom: auto;
+
+        /* Скроллбар */
+        .commands-list::-webkit-scrollbar { width: 6px; }
+        .commands-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        .commands-list::-webkit-scrollbar-thumb { background: #0077ff; border-radius: 3px; }
+
+        .cmd-group { margin-bottom: 20px; }
+        .cmd-group h3 {
+            color: #00ffff; /* Голубой */
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
-        .price-box { text-align: center; margin-bottom: 20px; }
-        .price { font-size: 48px; font-weight: 700; color: #fff; line-height: 1; }
-        .price span { font-size: 24px; color: #a1a1a6; }
-        .price-label { font-size: 13px; color: #86868b; margin-top: 5px; }
-        .qr-container { background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom: 20px; }
-        .qr-container img { width: 140px; height: 140px; display: block; background: #f0f0f0; }
-        .pay-btn {
-            background: #007aff; color: white; border: none;
-            padding: 14px 20px; border-radius: 10px;
-            font-size: 16px; font-weight: 600; cursor: pointer; width: 100%;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+        .cmd-group p {
+            color: #d0d0e0;
+            font-size: 15px;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            font-family: 'Courier New', Courier, monospace; /* Шрифт как в коде */
         }
-        .pay-btn:hover { background: #006ae6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 122, 255, 0.6); }
-        .pay-btn:active { transform: translateY(0); }
-        .secure-note { font-size: 11px; color: #86868b; text-align: center; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        
-        @media (max-width: 850px) {
-            .content { flex-direction: column; padding: 20px; }
-            .right-side { width: 100%; margin-top: 20px; }
+        .cmd-group p span { color: #ff3366; font-size: 13px; } /* Красный акцент */
+
+        /* --- ПРАВАЯ КОЛОНКА (ОПЛАТА) --- */
+        .payment-box {
+            border: 1px solid #ff0044; /* Красная неоновая рамка */
+            border-radius: 8px;
+            padding: 25px;
+            background: rgba(50, 0, 10, 0.4);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 0, 68, 0.2);
+        }
+
+        .price {
+            font-size: 52px;
+            color: #ff3366; /* Красный неон */
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(255, 51, 102, 0.7);
+            margin-bottom: 5px;
+        }
+        .price-desc {
+            font-size: 13px;
+            color: #a0a0b0;
+            margin-bottom: 25px;
+        }
+
+        .qr-box {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 0 auto 25px auto;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .qr-box img { width: 100%; height: 100%; object-fit: contain; }
+
+        .buy-btn {
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+        .buy-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        /* Адаптив */
+        @media (max-width: 800px) {
+            .main-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-blur">
-        <div class="blur-circle circle-1"></div>
-        <div class="blur-circle circle-2"></div>
-        <div class="blur-circle circle-3"></div>
-    </div>
-    <div class="mac-window">
-        <div class="window-header">
-            <div class="dots">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
+
+    <!-- Холст для падающих точек -->
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- Окно сайта -->
+    <div class="container">
+        <header>
+            <h1>ПЯТНИЦА</h1>
+            <div class="subtitle">Искусственный интеллект</div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Список команд -->
+            <div class="commands-wrapper">
+                <div class="commands-title">Список команд</div>
+                <div class="commands-list">
+                    
+                    <div class="cmd-group">
+                        <h3>1. Открытие программ и сайтов</h3>
+                        <p>"Пятница, открой YouTube"</p>
+                        <p>"Пятница, закрой YouTube"</p>
+                        <p>"Пятница, открой ВКонтакте"</p>
+                        <p>"Пятница, открой Steam"</p>
+                        <p>"Пятница, открой TikTok"</p>
+                    </div>
+
+                    <div class="cmd-group">
+                        <h3>2. Управление компьютером</h3>
+                        <p>"Пятница, громкость 50" <span>(от 0 до 100)</span></p>
+                        <p>"Пятница, яркость 70" <span>(от 0 до 100)</span></p>
+                    </div>
+
+                    <div class="cmd-group">
+                        <h3>3. Игры</h3>
+                        <p>"Пятница, запусти Майнкрафт"</p>
+                    </div>
+
+                    <div class="cmd-group">
+                        <h3>4. Сон и выключение</h3>
+                        <p>"Пятница, я спать" <span>(включает музыку и таймер)</span></p>
+                        <p>"Пятница, отбой" <span>(отменяет таймер)</span></p>
+                        <p>"Пятница, выход есть" <span>(выключает ПК)</span></p>
+                    </div>
+
+                    <div class="cmd-group">
+                        <h3>5. Разное</h3>
+                        <p>"Пятница, кто ты?"</p>
+                        <p>"Пятница, время"</p>
+                        <p>"Пятница, какая погода"</p>
+                        <p>"Пятница, расскажи анекдот"</p>
+                        <p>"Пятница, найди [запрос]" <span>(поиск в Google)</span></p>
+                    </div>
+
+                </div>
             </div>
-            <div class="window-title">Пятница Продакшн — Список команд</div>
-        </div>
-        
-        <div class="content">
-            <div class="left-side">
-                <div class="app-icon">🤖</div>
-                <h1>Пятница</h1>
-                <div class="main-slogan">Искусственный интеллект, управляющий компьютером.</div>
+
+            <!-- Оплата -->
+            <div class="payment-box">
+                <div class="price">300₽</div>
+                <div class="price-desc">Единоразовый лицензионный платеж</div>
                 
-                <div class="commands-box">
-                    <h3>1. Программы и сайты</h3>
-                    <p>«Пятница, открой YouTube / ВКонтакте / Steam / TikTok»</p>
-                    <p>«Пятница, закрой YouTube»</p>
-                    
-                    <h3>2. Управление ПК</h3>
-                    <p>«Пятница, громкость 50» <span>(от 0 до 100)</span></p>
-                    <p>«Пятница, яркость 70» <span>(от 0 до 100)</span></p>
-                    
-                    <h3>3. Игры</h3>
-                    <p>«Пятница, запусти Майнкрафт»</p>
-                    
-                    <h3>4. Сон и выключение</h3>
-                    <p>«Пятница, я спать» <span>(включает музыку и таймер)</span></p>
-                    <p>«Пятница, отбой» <span>(отменяет таймер)</span></p>
-                    <p>«Пятница, выход есть» <span>(выключает ПК)</span></p>
-                    
-                    <h3>5. Разное</h3>
-                    <p>«Пятница, кто ты?»</p>
-                    <p>«Пятница, время»</p>
-                    <p>«Пятница, какая погода»</p>
-                    <p>«Пятница, расскажи анекдот»</p>
-                    <p>«Пятница, найди [запрос]» <span>(поиск в Google)</span></p>
+                <div class="qr-box">
+                    <!-- ВСТАВЬ СЮДА СВОЙ QR-КОД -->
+                    <img src="qr.png" alt="QR-код">
                 </div>
-            </div>
-            
-            <div class="right-side">
-                <div class="price-box">
-                    <div class="price">300<span>₽</span></div>
-                    <div class="price-label">Единоразовый лицензионный платеж</div>
-                </div>
-                <div class="qr-container">
-                    <!-- ВСТАВЬ СЮДА СВОЙ QR-КОД (файл должен лежать в репозитории) -->
-                    <img src="qr.png" alt="QR-код для оплаты">
-                </div>
-                <button class="pay-btn" onclick="alert('После оплаты свяжитесь с нами в Telegram для получения лицензионного ключа.')">
+
+                <button class="buy-btn" onclick="alert('После оплаты свяжитесь с нами в Telegram для получения лицензионного ключа.')">
                     Получить доступ
                 </button>
-                <div class="secure-note">🔒 Безопасная оплата</div>
             </div>
         </div>
     </div>
+
+    <!-- Скрипт для падающих точек (снежка) -->
+    <script>
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Настройка размера холста
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Создание точек
+        const particles = [];
+        const particleCount = 100;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5, // Размер точек
+                speed: Math.random() * 1 + 0.5,    // Скорость падения
+                color: Math.random() > 0.5 ? '#00ffff' : '#ff3366' // Голубые и красные точки
+            });
+        }
+
+        // Анимация
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                // Рисуем точку
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = p.color;
+                ctx.fill();
+                
+                // Двигаем вниз
+                p.y += p.speed;
+                
+                // Если упала за экран, возвращаем наверх
+                if (p.y > canvas.height) {
+                    p.y = 0;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
