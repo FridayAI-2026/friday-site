@@ -3,97 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friday AI - Твой личный Джарвис</title>
+    <title>Пятница Продакшн</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #01040a;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1e1e24 0%, #2d2d3a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            padding: 20px;
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        .bg-blur { position: fixed; width: 100%; height: 100%; z-index: 0; overflow: hidden; top: 0; left: 0; }
+        .blur-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; }
+        .circle-1 { width: 400px; height: 400px; background: #007aff; top: -100px; left: -100px; }
+        .circle-2 { width: 300px; height: 300px; background: #af52de; bottom: -50px; right: -50px; }
+        .circle-3 { width: 250px; height: 250px; background: #ff2d55; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.3; }
+        
+        .mac-window {
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 30, 40, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .window-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; transition: transform 0.2s; }
+        .dot:hover { transform: scale(1.2); }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .window-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #a1a1a6;
+            margin-right: 56px;
+            letter-spacing: 0.5px;
+        }
+        
+        .content { padding: 40px 50px; display: flex; gap: 40px; }
+        .left-side { flex: 1.2; display: flex; flex-direction: column; }
+        .app-icon {
+            width: 70px; height: 70px;
+            background: linear-gradient(135deg, #007aff, #af52de);
+            border-radius: 18px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 36px; margin-bottom: 15px;
+            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3);
         }
         h1 {
-            color: #64ffda;
-            font-size: 36px;
-            margin-bottom: 10px;
+            font-size: 38px; font-weight: 700; margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #a1a1a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .subtitle {
-            color: #8892b0;
-            font-size: 16px;
-            margin-bottom: 40px;
-        }
-        .features {
-            text-align: left;
-            background-color: #112240;
+        .main-slogan { font-size: 18px; color: #fff; font-weight: 500; margin-bottom: 25px; line-height: 1.3; }
+        
+        /* Стили для списка команд (взято с твоего скрина) */
+        .commands-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            max-height: 350px;
+            overflow-y: auto;
         }
-        .features ul {
-            list-style-type: none;
-            padding: 0;
+        .commands-box::-webkit-scrollbar { width: 6px; }
+        .commands-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        
+        .commands-box h3 { font-size: 13px; color: #007aff; text-transform: uppercase; margin-bottom: 10px; margin-top: 15px; letter-spacing: 1px;}
+        .commands-box h3:first-child { margin-top: 0; }
+        .commands-box p { font-size: 14px; color: #e5e5ea; margin-bottom: 5px; line-height: 1.4; }
+        .commands-box p span { color: #86868b; font-size: 12px; } /* Приписки типа (от 0 до 100) */
+        
+        .right-side {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: fit-content;
+            margin-top: auto;
+            margin-bottom: auto;
         }
-        .features li {
-            margin: 10px 0;
-            color: #cceeff;
+        .price-box { text-align: center; margin-bottom: 20px; }
+        .price { font-size: 48px; font-weight: 700; color: #fff; line-height: 1; }
+        .price span { font-size: 24px; color: #a1a1a6; }
+        .price-label { font-size: 13px; color: #86868b; margin-top: 5px; }
+        .qr-container { background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        .qr-container img { width: 140px; height: 140px; display: block; background: #f0f0f0; }
+        .pay-btn {
+            background: #007aff; color: white; border: none;
+            padding: 14px 20px; border-radius: 10px;
+            font-size: 16px; font-weight: 600; cursor: pointer; width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
         }
-        .price {
-            font-size: 28px;
-            color: #64ffda;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .buy-btn {
-            display: inline-block;
-            background-color: #1f6aa5;
-            color: white;
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 20px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .buy-btn:hover {
-            background-color: #144870;
-        }
-        .footer {
-            margin-top: 50px;
-            font-size: 12px;
-            color: #5a6a85;
+        .pay-btn:hover { background: #006ae6; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 122, 255, 0.6); }
+        .pay-btn:active { transform: translateY(0); }
+        .secure-note { font-size: 11px; color: #86868b; text-align: center; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        
+        @media (max-width: 850px) {
+            .content { flex-direction: column; padding: 20px; }
+            .right-side { width: 100%; margin-top: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>FRIDAY AI</h1>
-        <div class="subtitle">Твой личный голосовой ассистент</div>
-
-        <div class="features">
-            <h3>Что она умеет:</h3>
-            <ul>
-                <li>✔️ Открывать YouTube и другие сайты</li>
-                <li>✔️ Управлять громкостью и яркостью</li>
-                <li>✔️ Запускать Minecraft</li>
-                <li>✔️ Говорить время и погоду</li>
-                <li>✔️ Приятный женский голос (Светлана)</li>
-                <li>✔️ Снег и реактор в интерфейсе</li>
-            </ul>
+    <div class="bg-blur">
+        <div class="blur-circle circle-1"></div>
+        <div class="blur-circle circle-2"></div>
+        <div class="blur-circle circle-3"></div>
+    </div>
+    <div class="mac-window">
+        <div class="window-header">
+            <div class="dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="window-title">Пятница Продакшн — Список команд</div>
         </div>
-
-        <div class="price">Всего 300 рублей</div>
         
-        <!-- ВСТАВЬ СЮДА СВОЮ ССЫЛКУ НА ОПЛАТУ -->
-        <a href="https://google.com" class="buy-btn" target="_blank">КУПИТЬ</a>
-
-        <div class="footer">
-            После оплаты отправьте скриншот и ваш ID (из программы) в Telegram/MAX для получения ключа.
+        <div class="content">
+            <div class="left-side">
+                <div class="app-icon">🤖</div>
+                <h1>Пятница</h1>
+                <div class="main-slogan">Искусственный интеллект, управляющий компьютером.</div>
+                
+                <div class="commands-box">
+                    <h3>1. Программы и сайты</h3>
+                    <p>«Пятница, открой YouTube / ВКонтакте / Steam / TikTok»</p>
+                    <p>«Пятница, закрой YouTube»</p>
+                    
+                    <h3>2. Управление ПК</h3>
+                    <p>«Пятница, громкость 50» <span>(от 0 до 100)</span></p>
+                    <p>«Пятница, яркость 70» <span>(от 0 до 100)</span></p>
+                    
+                    <h3>3. Игры</h3>
+                    <p>«Пятница, запусти Майнкрафт»</p>
+                    
+                    <h3>4. Сон и выключение</h3>
+                    <p>«Пятница, я спать» <span>(включает музыку и таймер)</span></p>
+                    <p>«Пятница, отбой» <span>(отменяет таймер)</span></p>
+                    <p>«Пятница, выход есть» <span>(выключает ПК)</span></p>
+                    
+                    <h3>5. Разное</h3>
+                    <p>«Пятница, кто ты?»</p>
+                    <p>«Пятница, время»</p>
+                    <p>«Пятница, какая погода»</p>
+                    <p>«Пятница, расскажи анекдот»</p>
+                    <p>«Пятница, найди [запрос]» <span>(поиск в Google)</span></p>
+                </div>
+            </div>
+            
+            <div class="right-side">
+                <div class="price-box">
+                    <div class="price">300<span>₽</span></div>
+                    <div class="price-label">Единоразовый лицензионный платеж</div>
+                </div>
+                <div class="qr-container">
+                    <!-- ВСТАВЬ СЮДА СВОЙ QR-КОД (файл должен лежать в репозитории) -->
+                    <img src="qr.png" alt="QR-код для оплаты">
+                </div>
+                <button class="pay-btn" onclick="alert('После оплаты свяжитесь с нами в Telegram для получения лицензионного ключа.')">
+                    Получить доступ
+                </button>
+                <div class="secure-note">🔒 Безопасная оплата</div>
+            </div>
         </div>
     </div>
 </body>
