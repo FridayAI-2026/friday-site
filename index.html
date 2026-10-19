@@ -3,312 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пятница Продакшн</title>
+    <title>Friday AI — Твой личный искусственный интеллект</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+        /* --- СБРОС И БАЗА --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0a0a10; /* Глубокий черный */
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            background-color: #050505;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* --- ПАДАЮЩИЕ ТОЧКИ (СНЕЖОК) --- */
-        canvas {
+        /* --- АНИМИРОВАННЫЙ ФОН (ГРАДИЕНТ) --- */
+        .bg-glow {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none; /* Чтобы точки не мешали кликать */
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(100, 255, 218, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 20%, rgba(31, 106, 165, 0.1) 0%, transparent 40%);
+            z-index: -1;
+            animation: rotateBg 20s linear infinite;
         }
 
-        /* --- ГЛАВНОЕ ОКНО --- */
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- КОНТЕЙНЕР --- */
         .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
             position: relative;
             z-index: 1;
-            background: rgba(10, 15, 25, 0.85); /* Темно-синий полупрозрачный */
-            backdrop-filter: blur(10px);
-            border: 1px solid #1a5276; /* Темно-синяя рамка */
-            box-shadow: 0 0 30px rgba(0, 150, 255, 0.1); /* Легкое свечение */
-            border-radius: 12px;
-            width: 95%;
-            max-width: 950px;
-            display: flex;
-            flex-direction: column;
-            padding: 30px;
         }
 
-        /* Заголовок */
+        /* --- ШАПКА --- */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            padding: 80px 0 60px;
         }
+
         h1 {
-            font-size: 48px;
-            color: #00ffff; /* Голубой неон */
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.4);
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-            font-weight: 800;
+            font-size: 4em;
+            font-weight: 900;
+            color: #64ffda;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.5), 0 0 40px rgba(100, 255, 218, 0.2);
+            margin-bottom: 10px;
+            animation: fadeInDown 1s ease-out;
         }
+
         .subtitle {
-            font-size: 18px;
-            color: #a0a0b0;
-            letter-spacing: 1px;
-        }
-
-        /* Основная сетка (Слева команды, справа оплата) */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 30px;
-        }
-
-        /* --- ЛЕВАЯ КОЛОНКА (СПИСОК КОМАНД) --- */
-        .commands-wrapper {
-            border: 1px solid #0077ff; /* Синяя рамка */
-            border-radius: 8px;
-            padding: 20px;
-            background: rgba(0, 30, 60, 0.4);
-            box-shadow: inset 0 0 20px rgba(0, 119, 255, 0.1);
-        }
-
-        .commands-title {
-            color: #00ffcc; /* Бирюзовый */
-            font-size: 20px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
+            font-size: 1.3em;
+            color: #a8b2d1;
             letter-spacing: 2px;
-            border-bottom: 1px dashed #0077ff;
-            padding-bottom: 10px;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
 
-        .commands-list {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
+        /* --- СЕКЦИИ (СТЕКЛО) --- */
+        section {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
-        /* Скроллбар */
-        .commands-list::-webkit-scrollbar { width: 6px; }
-        .commands-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
-        .commands-list::-webkit-scrollbar-thumb { background: #0077ff; border-radius: 3px; }
-
-        .cmd-group { margin-bottom: 20px; }
-        .cmd-group h3 {
-            color: #00ffff; /* Голубой */
-            font-size: 14px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
+        section:hover {
+            border-color: rgba(100, 255, 218, 0.3);
+            transform: translateY(-2px);
         }
-        .cmd-group p {
-            color: #d0d0e0;
-            font-size: 15px;
-            margin-bottom: 5px;
-            line-height: 1.4;
-            font-family: 'Courier New', Courier, monospace; /* Шрифт как в коде */
-        }
-        .cmd-group p span { color: #ff3366; font-size: 13px; } /* Красный акцент */
 
-        /* --- ПРАВАЯ КОЛОНКА (ОПЛАТА) --- */
-        .payment-box {
-            border: 1px solid #ff0044; /* Красная неоновая рамка */
-            border-radius: 8px;
-            padding: 25px;
-            background: rgba(50, 0, 10, 0.4);
+        h2 {
+            font-size: 2em;
+            color: #64ffda;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #64ffda;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #64ffda;
+        }
+
+        p {
+            color: #8892b0;
+            margin-bottom: 15px;
+        }
+
+        /* --- БЕТА-ПРЕДУПРЕЖДЕНИЕ --- */
+        .beta-warning {
+            background: rgba(255, 215, 0, 0.05);
+            border-left: 4px solid #ffd700;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 30px 0;
+            color: #ffd700;
+            font-size: 0.95em;
+        }
+
+        /* --- СЕТКА ТАРИФОВ --- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .pricing-card {
+            background: rgba(11, 28, 51, 0.8);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 20px;
+            padding: 40px 30px;
             text-align: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 0, 68, 0.2);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #64ffda;
+            box-shadow: 0 15px 30px rgba(100, 255, 218, 0.1);
+            background: rgba(17, 34, 64, 0.9);
+        }
+
+        .pricing-card.popular {
+            border-color: #64ffda;
+            background: linear-gradient(180deg, rgba(11, 28, 51, 0.9) 0%, rgba(17, 34, 64, 0.9) 100%);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.15);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.08) translateY(-5px);
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #64ffda;
+            color: #000;
+            font-size: 0.8em;
+            font-weight: 800;
+            padding: 5px 15px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+        }
+
+        .duration {
+            font-size: 1.2em;
+            color: #a8b2d1;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         .price {
-            font-size: 52px;
-            color: #ff3366; /* Красный неон */
+            font-size: 3.5em;
             font-weight: 900;
-            text-shadow: 0 0 15px rgba(255, 51, 102, 0.7);
-            margin-bottom: 5px;
-        }
-        .price-desc {
-            font-size: 13px;
-            color: #a0a0b0;
-            margin-bottom: 25px;
+            color: #e2e8f0;
+            margin: 10px 0;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
-        .qr-box {
+        .price span {
+            font-size: 0.4em;
+            color: #64ffda;
+            font-weight: 600;
+        }
+
+        .features {
+            list-style: none;
+            margin: 20px 0;
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            color: #8892b0;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features li::before {
+            content: '✓';
+            color: #64ffda;
+            font-weight: bold;
+        }
+
+        /* --- КНОПКИ --- */
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            color: #64ffda;
+            border: 2px solid #64ffda;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #64ffda;
+            color: #050505;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.4);
+        }
+
+        .btn-primary {
+            background: #64ffda;
+            color: #050505;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #fff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+        }
+
+        /* --- БЛОК ОПЛАТЫ И QR --- */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed rgba(100, 255, 218, 0.5);
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+
+        .qr-image {
+            width: 250px;
+            height: 250px;
             background: #fff;
             padding: 10px;
-            border-radius: 8px;
-            margin: 0 auto 25px auto;
-            width: 160px;
-            height: 160px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(100, 255, 218, 0.2);
+            /* Сюда ты вставишь ссылку на свою картинку */
+            /* Если картинки нет, покажет серый квадрат */
             display: flex;
-            justify-content: center;
             align-items: center;
-        }
-        .qr-box img { width: 100%; height: 100%; object-fit: contain; }
-
-        .buy-btn {
-            background: transparent;
-            color: #00ffff;
-            border: 2px solid #00ffff;
-            padding: 15px;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
-        }
-        .buy-btn:hover {
-            background: #00ffff;
+            justify-content: center;
             color: #000;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+            font-weight: bold;
         }
 
-        /* Адаптив */
-        @media (max-width: 800px) {
-            .main-grid { grid-template-columns: 1fr; }
+        /* --- СПИСОК ВОЗМОЖНОСТЕЙ --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            color: #a8b2d1;
+        }
+
+        /* --- ПОДВАЛ --- */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+
+        /* --- АНИМАЦИИ ПОЯВЛЕНИЯ --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Адаптив под телефоны */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.popular { transform: scale(1); }
+            .pricing-card.popular:hover { transform: scale(1.02); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Холст для падающих точек -->
-    <canvas id="starsCanvas"></canvas>
+    <div class="bg-glow"></div>
 
-    <!-- Окно сайта -->
     <div class="container">
+        
         <header>
-            <h1>ПЯТНИЦА</h1>
-            <div class="subtitle">Искусственный интеллект</div>
+            <h1>Friday AI</h1>
+            <div class="subtitle">Твой личный искусственный интеллект</div>
         </header>
 
-        <div class="main-grid">
-            <!-- Список команд -->
-            <div class="commands-wrapper">
-                <div class="commands-title">Список команд</div>
-                <div class="commands-list">
-                    
-                    <div class="cmd-group">
-                        <h3>1. Открытие программ и сайтов</h3>
-                        <p>"Пятница, открой YouTube"</p>
-                        <p>"Пятница, закрой YouTube"</p>
-                        <p>"Пятница, открой ВКонтакте"</p>
-                        <p>"Пятница, открой Steam"</p>
-                        <p>"Пятница, открой TikTok"</p>
-                    </div>
-
-                    <div class="cmd-group">
-                        <h3>2. Управление компьютером</h3>
-                        <p>"Пятница, громкость 50" <span>(от 0 до 100)</span></p>
-                        <p>"Пятница, яркость 70" <span>(от 0 до 100)</span></p>
-                    </div>
-
-                    <div class="cmd-group">
-                        <h3>3. Игры</h3>
-                        <p>"Пятница, запусти Майнкрафт"</p>
-                    </div>
-
-                    <div class="cmd-group">
-                        <h3>4. Сон и выключение</h3>
-                        <p>"Пятница, я спать" <span>(включает музыку и таймер)</span></p>
-                        <p>"Пятница, отбой" <span>(отменяет таймер)</span></p>
-                        <p>"Пятница, выход есть" <span>(выключает ПК)</span></p>
-                    </div>
-
-                    <div class="cmd-group">
-                        <h3>5. Разное</h3>
-                        <p>"Пятница, кто ты?"</p>
-                        <p>"Пятница, время"</p>
-                        <p>"Пятница, какая погода"</p>
-                        <p>"Пятница, расскажи анекдот"</p>
-                        <p>"Пятница, найди [запрос]" <span>(поиск в Google)</span></p>
-                    </div>
-
-                </div>
+        <section>
+            <h2>О программе</h2>
+            <p>Friday AI — это голосовой ассистент нового поколения. Она живет на твоем компьютере, понимает команды с полуслова и помогает управлять системой. Никаких сложных настроек — просто скажи, что нужно сделать.</p>
+            
+            <div class="beta-warning">
+                <strong>⚠️ ВАЖНО: Программа находится в стадии БЕТА-ТЕСТИРОВАНИЯ.</strong><br>
+                Сейчас для работы ИИ используется бесплатный тестовый сервер. Из-за этого Friday может думать <strong>до 15 секунд</strong>. В будущем мы подключим мощный платный API, и скорость ответа вырастет до 1–2 секунд. Покупая подписку сейчас, вы получаете все будущие обновления бесплатно.
             </div>
+        </section>
 
-            <!-- Оплата -->
-            <div class="payment-box">
-                <div class="price">300₽</div>
-                <div class="price-desc">Единоразовый лицензионный платеж</div>
+        <section>
+            <h2>Что она умеет?</h2>
+            <div class="features-grid">
+                <div class="feature-item">🌐 Открывает сайты</div>
+                <div class="feature-item">🎮 Запускает игры</div>
+                <div class="feature-item">🎛 Управляет ПК</div>
+                <div class="feature-item">🎬 Записывает экран</div>
+                <div class="feature-item">🗣 Общается голосом</div>
+                <div class="feature-item">🧠 Отвечает на вопросы</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Выбери свой тариф</h2>
+            <div class="pricing-grid">
                 
-                <div class="qr-box">
-                    <!-- ВСТАВЬ СЮДА СВОЙ QR-КОД -->
-                    <img src="qr.png" alt="QR-код">
+                <div class="pricing-card">
+                    <div class="duration">3 месяца</div>
+                    <div class="price">349 <span>₽</span></div>
+                    <ul class="features">
+                        <li>Доступ к Friday</li>
+                        <li>Все команды</li>
+                        <li>Обновления</li>
+                    </ul>
+                    <a href="#pay" class="btn">Выбрать</a>
                 </div>
 
-                <button class="buy-btn" onclick="alert('После оплаты свяжитесь с нами в Telegram для получения лицензионного ключа.')">
-                    Получить доступ
-                </button>
+                <div class="pricing-card popular">
+                    <div class="badge">Хит продаж</div>
+                    <div class="duration">12 месяцев</div>
+                    <div class="price">899 <span>₽</span></div>
+                    <ul class="features">
+                        <li>Доступ к Friday</li>
+                        <li>Все команды</li>
+                        <li>Все будущие обновления</li>
+                        <li>Приоритетная поддержка</li>
+                    </ul>
+                    <a href="#pay" class="btn btn-primary">Выбрать</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="duration">6 месяцев</div>
+                    <div class="price">599 <span>₽</span></div>
+                    <ul class="features">
+                        <li>Доступ к Friday</li>
+                        <li>Все команды</li>
+                        <li>Обновления</li>
+                    </ul>
+                    <a href="#pay" class="btn">Выбрать</a>
+                </div>
+
             </div>
-        </div>
+        </section>
+
+        <section id="pay">
+            <h2>Оплата</h2>
+            <p style="text-align: center;">Выбери подходящий тариф и отсканируй QR-код.</p>
+            
+            <div class="qr-container">
+                <!-- ВСТАВЬ ССЫЛКУ НА СВОЙ QR-КОД ВНУТРИ КАВЫЧЕК -->
+                <img src="https://via.placeholder.com/250x250.png?text=Ваш+QR+Код" alt="QR-код для оплаты" class="qr-image">
+                
+                <p style="margin-top: 10px; color: #a8b2d1;">Сумма к оплате соответствует выбранному тарифу</p>
+                <p style="font-size: 0.9em; color: #4a5568; margin-top: 5px;">После оплаты обязательно напиши нам в ВК</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <!-- ЗАМЕНИ ССЫЛКУ НА СВОЕ СООБЩЕСТВО ВК -->
+                <a href="https://vk.com/ВАШЕ_СООБЩЕСТВО" class="btn btn-primary" target="_blank" style="width: auto; padding: 15px 40px;">
+                    Написать в поддержку (ВК)
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            &copy; 2026 Friday AI. Все права защищены.
+        </footer>
+
     </div>
 
-    <!-- Скрипт для падающих точек (снежка) -->
-    <script>
-        const canvas = document.getElementById('starsCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Настройка размера холста
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Создание точек
-        const particles = [];
-        const particleCount = 100;
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 1.5 + 0.5, // Размер точек
-                speed: Math.random() * 1 + 0.5,    // Скорость падения
-                color: Math.random() > 0.5 ? '#00ffff' : '#ff3366' // Голубые и красные точки
-            });
-        }
-
-        // Анимация
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(p => {
-                // Рисуем точку
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = p.color;
-                ctx.fill();
-                
-                // Двигаем вниз
-                p.y += p.speed;
-                
-                // Если упала за экран, возвращаем наверх
-                if (p.y > canvas.height) {
-                    p.y = 0;
-                    p.x = Math.random() * canvas.width;
-                }
-            });
-
-            requestAnimationFrame(animate);
-        }
-        animate();
-    </script>
 </body>
 </html>
