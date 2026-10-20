@@ -45,6 +45,18 @@
 
         .beta-warning { background: rgba(255, 215, 0, 0.05); border-left: 4px solid #ffd700; padding: 15px; border-radius: 0 10px 10px 0; margin: 20px 0; color: #ffd700; font-size: 0.95em; }
 
+        /* ПЛАШКА БУДУЩИХ ПЛАТФОРМ */
+        .future-platforms {
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px dashed #64ffda;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            color: #64ffda;
+            text-align: center;
+            font-size: 0.95em;
+        }
+
         /* СЕТКА ТАРИФОВ (АДАПТИВНАЯ) */
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
         .pricing-card { background: rgba(11, 28, 51, 0.8); border: 1px solid rgba(100, 255, 218, 0.2); border-radius: 15px; padding: 30px 20px; text-align: center; position: relative; display: flex; flex-direction: column; }
@@ -77,8 +89,8 @@
             .subtitle { font-size: 1em; }
             section { padding: 20px 15px; }
             h2 { font-size: 1.5em; }
-            .pricing-grid { grid-template-columns: 1fr; } /* Карточки в один столбец */
-            .pricing-card.popular { transform: scale(1); } /* Убираем увеличение, чтобы не вылезало за края */
+            .pricing-grid { grid-template-columns: 1fr; } 
+            .pricing-card.popular { transform: scale(1); } 
             .price { font-size: 2.2em; }
         }
     </style>
@@ -123,7 +135,7 @@
             </ul>
         </section>
 
-        <!-- ТРЕБОВАНИЯ -->
+        <!-- ТРЕБОВАНИЯ И ПЛАТФОРМЫ -->
         <section>
             <h2>Системные требования</h2>
             <ul class="specs-list">
@@ -132,6 +144,11 @@
                 <li><strong>Интернет:</strong> Обязательно стабильное подключение</li>
                 <li><strong>Микрофон:</strong> Любой (для голосовых команд)</li>
             </ul>
+            
+            <!-- НОВАЯ ПЛАШКА ПРО БУДУЩЕЕ -->
+            <div class="future-platforms">
+                🚀 <strong>В планах на будущее:</strong> Мы работаем над версиями для macOS, Linux и мобильных устройств (Android/iOS). Следите за обновлениями!
+            </div>
         </section>
 
         <!-- ТАРИФЫ -->
