@@ -75,7 +75,7 @@
         .btn-primary:hover { background: #fff; }
 
         .qr-container { display: flex; flex-direction: column; align-items: center; padding: 30px; background: rgba(0, 0, 0, 0.4); border: 1px dashed rgba(100, 255, 218, 0.5); border-radius: 15px; margin-top: 20px; }
-        .qr-image { width: 200px; height: 200px; background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+        .qr-image { width: 200px; height: 200px; background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; object-fit: contain; }
 
         .specs-list, .instruction-list { list-style: none; text-align: left; max-width: 800px; margin: 0 auto; }
         .specs-list li, .instruction-list li { margin-bottom: 10px; border-bottom: 1px solid rgba(100, 255, 218, 0.1); padding-bottom: 5px; color: #8892b0; }
@@ -119,7 +119,7 @@
             <p style="text-align: center;">Скачайте архив с программой. Для работы потребуется лицензионный ключ.</p>
             <div style="text-align: center; margin-top: 20px;">
                 <!-- ЗАМЕНИ ССЫЛКУ НА ЯНДЕКС.ДИСК -->
-                <a href="ССЫЛКА_НА_СКАЧИВАНИЕ" class="btn btn-primary" target="_blank" style="padding: 12px 30px; display: inline-block; width: auto;">
+                <a href="ССЫЛКА_НА_ТВОЙ_ЯНДЕКС_ДИСК" class="btn btn-primary" target="_blank" style="padding: 12px 30px; display: inline-block; width: auto;">
                     ⬇ Скачать Friday AI
                 </a>
             </div>
@@ -145,7 +145,6 @@
                 <li><strong>Микрофон:</strong> Любой (для голосовых команд)</li>
             </ul>
             
-            <!-- НОВАЯ ПЛАШКА ПРО БУДУЩЕЕ -->
             <div class="future-platforms">
                 🚀 <strong>В планах на будущее:</strong> Мы работаем над версиями для macOS, Linux и мобильных устройств (Android/iOS). Следите за обновлениями!
             </div>
@@ -181,20 +180,21 @@
         <section id="pay">
             <h2>Оплата</h2>
             <div class="qr-container">
-                <!-- ВСТАВЬ КАРТИНКУ QR-КОДА -->
-                <img src="https://via.placeholder.com/200x200.png?text=Ваш+QR" alt="QR-код" class="qr-image">
+                <!-- ВСТАВЬ КАРТИНКУ QR-КОДА (назови файл qr.png и положи в папку сайта) -->
+                <img src="file:///C:/Users/nikolai/Pictures/qr.png" alt="QR-код СТБанк" class="qr-image">
                 <p style="margin-top: 10px; color: #a8b2d1;">После оплаты напишите нам в ВК</p>
             </div>
             <div style="text-align: center; margin-top: 20px;">
                 <!-- ССЫЛКА НА ТВОЙ ПАБЛИК ВК -->
-                <a href="https://vk.com/ВАШЕ_СООБЩЕСТВО" class="btn btn-primary" target="_blank" style="width: auto; padding: 12px 30px;">
+                <a href="ССЫЛКА_НА_ТВОЙ_ВК" class="btn btn-primary" target="_blank" style="width: auto; padding: 12px 30px;">
                     Написать в поддержку (ВК)
                 </a>
             </div>
         </section>
 
         <footer>
-            &copy; 2026 Friday AI. Все права защищены.
+            &copy; 2026 Friday AI. Все права защищены.<br>
+            <a href="oferta.html" style="color: #64ffda; margin-top: 10px; display: inline-block;">Пользовательское соглашение</a>
         </footer>
     </div>
 </body>
